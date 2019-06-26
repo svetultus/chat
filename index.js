@@ -28,6 +28,7 @@ io.on('connection', function (socket) {
     socket.to('all').emit('message', obj)
   });
   socket.on('receiveHistory', ()=>{
+    //localStorage
   })
 
 });
