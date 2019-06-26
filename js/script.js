@@ -31,30 +31,6 @@ let name = document.querySelector('#name'),
 
   socket.on('message', addMessage);
 
-    // authBtn.addEventListener('click', (event) => {
-    //     event.preventDefault();
-    //     let nameData =  name.value.trim();
-    //     let nicknameData = nickname.value.trim();
-    //     let userInfo = {
-    //             name: nameData,
-    //             nicknameck: nicknameData
-    //         };
-    //         authPopup.style.display = 'none';
-    //         if(!nameData || !nicknameData){
-    //           name.classList.add('authorization__modal_input-error');
-    //           nickname.classList.add('authorization__modal_input-error');
-    //           authPopup.style.display = 'block';
-    //         }
-    //       users.push(userInfo);
-    //       console.log(users);
-    //       nameOfuser.textContent = nameData;
-    //       members.style.display = 'block';
-    //       let membersList = renderUsers(users);
-    //       usersList.innerHTML = membersList;
-    //       sendBtn.removeAttribute('disabled');
-    //       });
-
-
     sendBtn.addEventListener('click', (event) => {
       event.preventDefault();
 
