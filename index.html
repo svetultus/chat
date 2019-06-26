@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <title>Chat</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="users">
+          <div class="users__block">
+            <div class="users__block_title">
+              <div class="users__block_img" id="loadPhoto">
+                <img class="users__block_image" src="" id="avatarImage">
+                <span class="no_photo">No photo</span>
+              </div>
+              <h3 class="users__block_name">Добро пожаловать!</h3>
+            </div>
+            <h4 class="users__block_members">Участники</h4>
+            <ul class="users__block_list" id="usersList">
+              <!-- <li>fdg</li>
+              <li>gfghfh</li> -->
+            </ul>
+          </div>
+        </div>
+        <div class="message">
+          <div class="message__container">
+            <ul class="message__list" id="messages"></ul>
+          </div>
+          <div class="message__form">
+            <input type="text" name="message" class="message__form_input" id="messageText" placeholder="Введите сообщение">
+            <button class="message__form_btn button-o" id="sendBtn">Отправить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="authorization__modal" id="authPopup">
+    <h3 class="authorization__modal_title">Авторизация</h3>
+    <div class="authorization__modal_block">
+          <input type="text" placeholder="Введите имя" class="authorization__modal_input" id="name">
+            <input type="text" placeholder="Введите ник" class="authorization__modal_input" id="nickname">
+            <button class="authorization__modal_btn button-o" id="authBtn">Войти</button>
+  </div>
+</div> -->
+
+    <div class="fileload__modal" id="fileLoadPopup">
+    <h4 class="fileload__modal_title">Загрузка фото</h4>
+    <div class="fileload__modal_block">
+      <div class="droparea">
+        <input type="file" name= "file" id="inputFile" accept="image/*" data-title="Перетащите сюда файл" class="fileload__modal_input">
+        <img src="" id="image" class="image_input">
+        <label for="inputFile" id='drop-area'></label>
+      </div>
+        <div class="fileload__modal_buttons">
+            <button class="button-o" id="cancel">Отмена</button>
+            <button class="button-o" id="sendPhoto">Загрузить</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+<script id="listOfUsers" type="text/x-handlebars-template">
+    {{#each this}}
+    <li>
+        <span>{{name}}</span>
+    </li>
+    {{/each}}
+</script>
+<script id="messageList" type="text/x-handlebars-template">
+  {{#each this}}
+  <li>
+      <img id= "messagesPhoto" onchange= "sendImg()" src="" alt="" style="width:70px; height: 70px; border-radius: 70px; box-shadow: none">
+      <span>{{date}}</span>
+      <span>{{username}}</span>
+      <span>{{content}}</span>
+  </li>
+  {{/each}}
+  </body>
+</html>
