@@ -169,7 +169,6 @@ body {
 }
 
 .fileload__modal {
-  display: none;
   position: absolute;
   top: 0;
   left: 35%;
@@ -265,7 +264,8 @@ body {
   display: none;
 }
 .image_input {
- display: none;
+ max-width: 100%;
+ max-height: 100%;
 }
 .image_input-add {
   display: block;
@@ -280,4 +280,25 @@ body {
   display: block;
   max-height: 500px;
   overflow: hidden;
+}
+.showed {
+  display: block;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+.toggleHide {
+  transition: opacity 0.5s;
+}
+.hidden {
+  opacity: 0;
+  transition: opacity 0.5s;
+  display: none;
+}
+.toggleHide.showed {
+  display: block;
+  opacity: 0
+}
+.toggleHide.hidden {
+  display: block;
+  opacity: 1
 }

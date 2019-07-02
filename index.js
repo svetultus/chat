@@ -17,18 +17,32 @@ io.on('connection', function (socket) {
   
   socket.emit('connected', 'a user connected')
 
-  socket.join('all')
-  socket.on('msg', function (msg) {
+  socket.join('all');
+
+  socket.on('msgToServer', function (msg) {
     const obj = {
       date: new Date(),
       content: msg,
       username: socket.id
     }
-    socket.emit('message', obj)
-    socket.to('all').emit('message', obj)
+    socket.emit('messageAddedToServer', obj)
+    socket.to('all').emit('messageAddedToServer', obj)
   });
+
   socket.on('receiveHistory', ()=>{
     //localStorage
+  });
+
+  socket.on('authSend', (obj)=> {
+    socket.emit('userAuthorized', obj);
+    socket.emit('memberListChanged', obj);
+    socket.to('all').emit('memberListChanged', obj);
+  });
+
+  socket.on('userAvatarToServer', ()=>{
+    console.log('avatarToServer');
+    socket.emit('updateUserAvatar');
+    socket.to('all').emit('updateUserAvatar');
   })
 
 });
