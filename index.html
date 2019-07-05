@@ -52,7 +52,7 @@
     <div class="fileload__modal hidden" id="fileLoadPopup">
     <h4 class="fileload__modal_title">Загрузка фото</h4>
     <div class="fileload__modal_block fileload_block">
-      <form class="fileload__modal_form">
+      <form class="fileload__modal_form" method="post" enctype="multipart/form-data" action="uploadAvatar">
         <div class="droparea">
           <input type="file" name= "file" id="inputFile" accept="image/jpeg" data-title="Перетащите сюда файл" class="fileload__modal_input">
           <img src="" id="image" class="image_input">
@@ -71,8 +71,10 @@
 <script src="js/script.js"></script>
 <script id="listOfUsers" type="text/x-handlebars-template">
     {{#each this}}
-    <li>
-        <span>{{name}}</span>
+    <li>  
+        <img class="user__img" src="{{avatar}}"></span>
+        <span data-nickName="{{nickName}}">{{name}}</span>
+        <span>{{nickName}}</span>
     </li>
     {{/each}}
 </script>
@@ -81,7 +83,7 @@
   <li>
       <img id= "messagesPhoto" onchange= "sendImg()" src="" alt="" style="width:70px; height: 70px; border-radius: 70px; box-shadow: none">
       <span>{{date}}</span>
-      <span>{{username}}</span>
+      <span>{{user.name}}</span>
       <span>{{content}}</span>
   </li>
   {{/each}}
