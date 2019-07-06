@@ -20,11 +20,7 @@
               </div>
               <h3 class="users__block_name">Добро пожаловать!</h3>
             </div>
-            <h4 class="users__block_members">Участники</h4>
-            <ul class="users__block_list" id="usersList">
-              <!-- <li>fdg</li>
-              <li>gfghfh</li> -->
-            </ul>
+            <div  id="usersList"></div>
           </div>
         </div>
         <div class="message">
@@ -70,18 +66,33 @@
 
 <script src="js/script.js"></script>
 <script id="listOfUsers" type="text/x-handlebars-template">
-    {{#each this}}
-    <li>  
-        <img class="user__img" src="{{avatar}}"></span>
-        <span data-nickName="{{nickName}}">{{name}}</span>
-        <span>{{nickName}}</span>
-    </li>
-    {{/each}}
+      {{#if this.length}}
+      <h4 class="users__block_members">Участники
+        <span>{{this.length}}</span>
+      </h4>
+      {{/if}}
+    <ul id="usersList">
+        {{#each this}}
+        <li class="users_list__elem">  
+            <!-- {{#if avatar }}
+              <img class="users_list__img" src="{{avatar}}"></span>
+            {{/if}} -->
+            <span data-nickName="{{nickName}}">{{name}}</span>
+        </li>
+        {{/each}}
+    </ul>
+    
 </script>
 <script id="messageList" type="text/x-handlebars-template">
   {{#each this}}
   <li>
-      <img id= "messagesPhoto" onchange= "sendImg()" src="" alt="" style="width:70px; height: 70px; border-radius: 70px; box-shadow: none">
+      <div class="messagesPhoto">
+          {{#if user.avatar}}
+            <img class="messagesPhoto__img" src="{{user.avatar}}">
+          {{else}}
+            <img src="">
+          {{/if}}
+      </div>
       <span>{{date}}</span>
       <span>{{user.name}}</span>
       <span>{{content}}</span>

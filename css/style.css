@@ -37,6 +37,7 @@ body {
   border-radius: 70px;
   background-color: #F2F1F2;
   cursor: pointer;
+  position: relative;
 }
 
 .no_photo {
@@ -45,6 +46,8 @@ body {
   color: #2C2B2C;
   text-align: center;
   font-weight: 400;
+  width: 100%;
+  position: absolute;
 }
 
 .users__block_name {
@@ -55,7 +58,6 @@ body {
 }
 
 .users__block_members {
-  display: none;
   margin-left: 15px;
   margin-top: 45px;
   font-size: 14px;
@@ -64,6 +66,10 @@ body {
 .users__block_list {
   list-style: none;
   font-size: 14px;
+}
+.users_list__img {
+  width: 20px;
+  height: 20px;
 }
 
 .button-o {
@@ -249,9 +255,8 @@ body {
   margin-right: 10px;
 }
 .users__block_image {
-  display: none;
-  width: 0;
-  height: 0;
+  width: 100%;
+  height: auto;
 }
 .users__block_image-add  {
   display: block;
@@ -301,4 +306,18 @@ body {
 .toggleHide.hidden {
   display: block;
   opacity: 1
+}
+.messagesPhoto {
+  width:70px; 
+  height: 70px;
+  border-radius: 70px; 
+  box-shadow: none;
+  overflow: hidden;
+  text-align: center;
+}
+.messagesPhoto__img {
+  width: auto;
+  height: auto;
+  max-height: 100%;
+  max-width: 100%;
 }

@@ -9,6 +9,14 @@ const bodyParser = require('body-parser')
 let users = [];
 let connections = [];
 let chatHistory = [];
+var dateOptions = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric'
+};
 
 //app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -37,7 +45,7 @@ io.on('connection', function (socket) {
 
   socket.on('msgToServer', function (msg) {
     const obj = {
-      date: new Date(),
+      date: (new Date()).toLocaleDateString("ru", dateOptions),
       content: msg.message,
       user: msg.user
     }
@@ -52,30 +60,70 @@ io.on('connection', function (socket) {
   });
 
   socket.on('authSend', (obj)=> {
-    socket.emit('userAuthorized', obj);
     // if (getHistoryFromStorage) {
     //   socket.emit('receiveHistory', chatHistory);
     // }
-    if ( !users.some((elem) => {
+    let userIndex;
+    if ( !users.some((elem,index) => {
+      userIndex = index;
       return elem.nickName === obj.nickName;
     })) {
       users.push(obj);   
-    };
+      socket.emit('userAuthorized', obj);
+    } else {
+      socket.emit('userAuthorized', users[userIndex]);
+    }
+    // console.log('users authSend');
+    // console.log(users);
     socket.to('all').emit('memberListChanged', users);
     socket.emit('memberListChanged', users);
     socket.emit('historySend', chatHistory);
   });
 
-  socket.on('userAvatarToServer', (user)=>{
-    
-    console.log('avatarToServer');
-    //console.log(file);
-    users[user['nickName']] = user;
-   
-    socket.emit('updateUserAvatar', user);
-    socket.emit('memberListChanged', users);
-    socket.to('all').emit('memberListChanged', users);
+  socket.on('userAvatarToServer', (user, file)=>{
+    let indexUser;
+    let fileName = './img/'+user.nickName+'.jpg';
+
+    if (!file) {
+      return false;
+    }
+
+    fs.writeFile(fileName, file, (err) => {
+      if (err) throw err;
+      user.avatar = fileName;
+
+      changeChatHistory(user);
+
+      socket.emit('updateUserAvatar', user);
+      socket.to('all').emit('updateUserAvatar', user);
+
+      if ( !users.some((elem, index) => {
+        indexUser = index;
+        return elem.nickName === user.nickName;
+      })) {
+        users.push(user);   
+      } else {
+        users[indexUser] = user;
+      }
+     
+      // console.log('users userAvatarToServer');
+      // console.log(users);
+      
+      // socket.emit('memberListChanged', users);
+      // socket.to('all').emit('memberListChanged', users);
+    });
   })
+
+  function changeChatHistory (user) {
+    chatHistory.forEach((elem)=>{
+      if (elem.user.nickName === user.nickName) {
+        elem.user.avatar = user.avatar;
+      };
+    });
+    socket.emit('historySend', chatHistory);
+    socket.to('all').emit('historySend', chatHistory);
+  }
+  
 });
 
 // io.on('send mess', (data) => {

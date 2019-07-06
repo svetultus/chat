@@ -13,12 +13,13 @@ let name = document.querySelector('#name'),
     //inputFileMessage = document.querySelector('#inputFileMessage'),
     fileLoadPopup = document.querySelector('#fileLoadPopup'),
     fileloadForm = document.querySelector('.fileload__modal_form'),
+    avatarImage = document.querySelector("#avatarImage"),
     droparea = document.querySelector('.droparea'),
     cancel = document.querySelector('#cancel'),
     sendPhoto = document.querySelector('#sendPhoto'),
     container = document.querySelector('.container'),
     nameOfuser = document.querySelector('.users__block_name'),
-    members = document.querySelector('.users__block_list'),
+    members = document.querySelector('#usersList'),
     messagesPhoto = document.querySelector('#messagesPhoto'),
     templateOfMessage = document.querySelector('#messageList').textContent,
     templateOfUsers = document.querySelector('#listOfUsers').textContent,
@@ -29,7 +30,8 @@ let name = document.querySelector('#name'),
     maxFileSize = 512000,
     currentUser = {
       nickName: '',
-      name: ''
+      name: '',
+      avatar: null
     },
     chatHistory = [];
     let storage;
@@ -44,11 +46,16 @@ let name = document.querySelector('#name'),
   socket.on('userAuthorized', userAuthorized);
   socket.on('memberListChanged', updateMemberList);
   socket.on('updateUserAvatar', (user) => {
-    console.log('updateUserAvatar');
-    console.log(user);
-
+    if (user.nickName === currentUser.nickName && user.avatar) {
+      avatarImage.src = user.avatar;
+      document.querySelector(".no_photo").classList.add("no_photo-o");
+    };
+    // if (user.avatar) {
+    //   console.log('поменять картинки');
+    //   changeAvatarInHistory(user);
+    // }
   });
-  socket.on('historySend', updateHistoryFormServer);
+  socket.on('historySend', updateHistoryFromServer);
 
   sendBtn.addEventListener('click', (event) => {
     event.preventDefault();
@@ -62,7 +69,7 @@ let name = document.querySelector('#name'),
       messageText.classList.add('message__form_input-error');
     }
     socket.emit('msgToServer', messageData);
-    console.log('msgToServer');
+    //console.log('msgToServer');
     messageText.value = '';
       
   });
@@ -77,10 +84,6 @@ let name = document.querySelector('#name'),
     }
   })
 
-  loadPhoto.addEventListener('click', (event) => {
-    toggleHide(fileLoadPopup);
-  });
-
   inputFile.addEventListener('change', (event) => {
     const targetInput = event.target;
     const file = event.target.files[0];
@@ -94,24 +97,21 @@ let name = document.querySelector('#name'),
       reader.onload = (function() {
         return function(e) {
           event.target.dataset.title = "";
-          bigImage.src =  e.target.result;
+          bigImage.src = e.target.result;
+          currentUser.avatar = "./img/" + currentUser.nickName + ".jpg";
         };
       })(file);
 
       // Read in the image file as a data URL.
       reader.readAsDataURL(file);
-
     };
   });
 
   fileloadForm.addEventListener('submit', (event)=>{
     event.preventDefault();
-
-    let bigImage = event.target.querySelector('.image_input');
+    socket.emit('userAvatarToServer', currentUser, inputFile.files[0]);
+    toggleHide(fileLoadPopup);
     // socket.emit('userAvatarToServer', inputFile.files[0]);
-    currentUser.avatar = bigImage.src;
-    socket.emit('userAvatarToServer', currentUser);
-
   });
 
   fileloadForm.addEventListener('reset', (event)=>{
@@ -128,7 +128,7 @@ let name = document.querySelector('#name'),
   });
 
   function addMessage(message){
-    console.log('messageAddedToServer');
+    //console.log('messageAddedToServer');
     chatHistory.push(message);
     //saveChatHistoryInStorage();
     //messagesListOnPage.push(message);
@@ -138,8 +138,17 @@ let name = document.querySelector('#name'),
   }
 
   function userAuthorized (obj) {
-    nameOfuser.innerHTML = obj.name;
+    //console.log(obj);
+    currentUser = obj;
+    nameOfuser.innerHTML = currentUser.name;
+    if(currentUser.avatar) {
+      avatarImage.src = currentUser.avatar;
+      document.querySelector(".no_photo").classList.add("no_photo-o");
+    }
     toggleHide(authPopup);
+    loadPhoto.addEventListener('click', (event) => {
+      toggleHide(fileLoadPopup);
+    });
     // if (getChatHistoryFromStorage()) {
     //   let messagesList = renderMessages(chatHistory);
     //       messages.innerHTML = messagesList;
@@ -148,6 +157,8 @@ let name = document.querySelector('#name'),
   }
 
   function updateMemberList (users) {
+    // console.log('users');
+    // console.log(users);
     let usersList = renderUsers(users);
     members.innerHTML = usersList;
 
@@ -232,11 +243,19 @@ let name = document.querySelector('#name'),
       return true;
   }
   
-  function updateHistoryFormServer (chatHistoryFromServer) {
+  function updateHistoryFromServer (chatHistoryFromServer) {
     chatHistory = chatHistoryFromServer;
 
     let messagesList = renderMessages(chatHistory);
     messages.innerHTML = messagesList;
     messageContainer.scrollTop = messageContainer.scrollHeight;
   }
+
+  // function changeAvatarInHistory (user) {
+  //   let photos = document.querySelectorAll(".messagesPhoto[data-userNickName='"+user.nickName+"']");
+    
+  //   photos.forEach((elem)=>{
+  //     elem.src = user.avatar;
+  //   });
+  // }
 });
