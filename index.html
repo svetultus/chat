@@ -24,12 +24,14 @@
           </div>
         </div>
         <div class="message">
-          <div class="message__container">
-            <ul class="message__list" id="messages"></ul>
+          <div class="message-list__container">
+            <ul class="message-list" id="messages"></ul>
           </div>
           <div class="message__form">
-            <input type="text" name="message" class="message__form_input" id="messageText" placeholder="Введите сообщение">
-            <button class="message__form_btn button-o" id="sendBtn">Отправить</button>
+            <form id="message-form">
+              <input type="text" name="message" class="message__form_input" id="messageText" placeholder="Введите сообщение">
+              <button class="message__form_btn button-o" id="sendBtn">Отправить</button>
+            </form>
           </div>
         </div>
       </div>
@@ -68,12 +70,12 @@
 <script id="listOfUsers" type="text/x-handlebars-template">
       {{#if this.length}}
       <h4 class="users__block_members">Участники
-        <span>{{this.length}}</span>
+        <span>({{this.length}})</span>
       </h4>
       {{/if}}
-    <ul id="usersList">
+    <ul class="users-list">
         {{#each this}}
-        <li class="users_list__elem">  
+        <li class="users-list__elem">  
             <!-- {{#if avatar }}
               <img class="users_list__img" src="{{avatar}}"></span>
             {{/if}} -->
@@ -85,17 +87,23 @@
 </script>
 <script id="messageList" type="text/x-handlebars-template">
   {{#each this}}
-  <li>
-      <div class="messagesPhoto">
-          {{#if user.avatar}}
-            <img class="messagesPhoto__img" src="{{user.avatar}}">
-          {{else}}
-            <img src="">
-          {{/if}}
+  <li class="message-list__elem"> 
+      {{#if user.avatar}}
+      <div class="message-list__photo">
+        <img class="message-list__img" src="{{user.avatar}}">
       </div>
-      <span>{{date}}</span>
-      <span>{{user.name}}</span>
-      <span>{{content}}</span>
+      {{else}}
+      <div class="message-list__photo no-photo">
+        <img src="">
+      </div>
+      {{/if}}
+      <div class="message-list__msg">
+        <div>
+          <span class="message-list__name">{{user.name}}</span>
+          <span class="message-list__date">{{date}}</span>
+        </div>
+        <div class="message-list__text">{{content}}</div>
+      </div>
   </li>
   {{/each}}
   </body>

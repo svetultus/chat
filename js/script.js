@@ -3,9 +3,10 @@ let name = document.querySelector('#name'),
     nickname = document.querySelector('#nickname'),
     authForm = document.querySelector('.authorization__modal_form'),
     sendBtn = document.querySelector('#sendBtn'),
+    messageForm = document.querySelector('#message-form'),
     messageText = document.querySelector('#messageText'),
     messages = document.querySelector('#messages');
-    messageContainer = document.querySelector('.message__container'),
+    messageContainer = document.querySelector('.message-list__container'),
     usersList = document.querySelector('#usersList'),
     authPopup = document.querySelector('#authPopup'),
     loadPhoto = document.querySelector('#loadPhoto'),
@@ -57,7 +58,7 @@ let name = document.querySelector('#name'),
   });
   socket.on('historySend', updateHistoryFromServer);
 
-  sendBtn.addEventListener('click', (event) => {
+  messageForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
     let messageData = {
