@@ -82,7 +82,7 @@ io.on('connection', function (socket) {
 
   socket.on('userAvatarToServer', (user, file)=>{
     let indexUser;
-    let fileName = './img/'+user.nickName+'.jpg';
+    let fileName = './img/'+cleanSymbols(user.nickName)+'.jpg';
 
     if (!file) {
       return false;
@@ -123,7 +123,10 @@ io.on('connection', function (socket) {
     socket.emit('historySend', chatHistory);
     socket.to('all').emit('historySend', chatHistory);
   }
-  
+
+  function cleanSymbols (str) {
+      return str.replace(/[&<>'"\s`#]/g, "_")
+  }
 });
 
 // io.on('send mess', (data) => {
